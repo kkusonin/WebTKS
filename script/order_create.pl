@@ -26,6 +26,8 @@ try {
 		surname => 'Иванов',
 		lead_id => 923456,
 	);
+	
+	$order->attributes;
 }
 catch {
     print $_, "\n";

@@ -1,4 +1,4 @@
-package WebTKS;
+﻿package WebTKS;
 use Moose;
 use namespace::autoclean;
 
@@ -41,7 +41,7 @@ our $VERSION = '0.01';
 
 __PACKAGE__->config(
     name => 'WebTKS',
-	# encoding => 'UTF-8',
+	encoding => 'UTF-8',
 	# Pass config params to LWP
     lwp_user_agent => {
         agent      => 'Application Sender',

@@ -53,13 +53,13 @@ coerce 'Birthdate',
 	};
 	
 has 'schema' => (
-	is => 'rw',
+	is => 'ro',
 	required => 1,
 	isa => 'DBIx::Class::Schema',
 );
 
 has 'lead_id' => (
-	is => 'rw',
+	is => 'ro',
 	isa => 'Int',
 	required => 1,
 );
@@ -166,11 +166,6 @@ has 'track' => (
     default => 'true',
 );
 
-sub BUILD {
-	my $self->shift;
-	
-}
-
 my @attr_serializable = qw(
     app_type_id
     app_subtype_id
@@ -199,6 +194,13 @@ sub to_hashref {
 	}
 	
 	return \%obj_hash;
+}
+
+sub attributes {
+	my $meta = __PACKAGE__->meta;
+	for my $attr ( $meta->get_all_attributes ) {
+		print $attr->name, "\n";
+  }
 }
 
 __PACKAGE__->meta->make_immutable;

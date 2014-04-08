@@ -1,5 +1,4 @@
-﻿package WebTKS::Controller::Orders;
-use utf8;
+package WebTKS::Controller::Orders;
 use Moose;
 use WebTKS::Form::Order;
 use namespace::autoclean;
@@ -70,10 +69,9 @@ sub add : GET Chained('orders') PathPart('create') Args(0) {
 		
 	$c->stash(
 		data => {
+			%$args,
 			utm_content	 => $lead->country_code,
 			phone_number => $lead->phone_number,
-			lead_id 	 => $lead->lead_id,
-			user		 => $user->user,
 			full_name	 => $user->full_name,
 		},
 		template => 'orders/create.tt',
@@ -85,7 +83,7 @@ sub create : POST Chained('orders') PathPart('create') Args(0) {
 	my $order_details = $c->req->body_params;
 	
 	delete $order_details->{submit};
-	my $order = $c->stash->{orders}->create($order_details);
+	$c->res->redirect($c->uri_for(($c->controller->action_for('add'),$order_details)));
 	
 	return;
 } 

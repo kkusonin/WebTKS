@@ -7,17 +7,11 @@ use namespace::autoclean;
 
 has '+item_class' => ( default => 'Order' );
 
-has_field 'lead_id' => (
-	type => 'Hidden',
-);
-
-has_field 'user' => (
-	type => 'Hidden',
-);
-
-has_field 'utm_content' => (
-	type => 'Hidden',
-);
+has_field 'lead_id' => ( type => 'Hidden' );
+has_field 'phone_number' => ( type => 'Hidden' );
+has_field 'user' => ( type => 'Hidden' );
+has_field 'full_name' => ( type => 'Hidden' );
+has_field 'utm_content' => ( type => 'Hidden' );
 
 has_field 'surname' => (
     type => 'Text',
