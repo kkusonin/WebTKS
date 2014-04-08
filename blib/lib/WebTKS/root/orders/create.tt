@@ -1,0 +1,70 @@
+﻿[% META title = 'Форма заполнения короткой заявки' -%]
+
+<div class="page-header">
+    <h3>Короткая Форма</h3>
+</div>
+
+<form class="form-horizontal" id="form545" method="post" action=[% c.uri_for(c.controller.action_for('create')) %] >
+<div>
+	<input type="hidden" name="lead_id" id="lead_id" value="" />
+	<input type="hidden" name="lead_id" id="user" value="" />
+	<input type="hidden" name="lead_id" id="utm_content" value=[% data.utm_content %] />
+	
+	<div class="control-group">
+		<label class="control-label" for="surname">Фамилия *</label>
+		<div class="controls">
+			<input type="text" name="surname" id="surname" value="" />
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="name">Имя *</label>
+		<div class="controls">
+			<input type="text" name="name" id="name" value="" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="patronymic">Отчество</label>
+		<div class="controls">
+			<input type="text" name="patronymic" id="patronymic" value="" />
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="birthdate">Дата рождения</label>
+		<div class="controls">
+			<input type="text" name="birthdate" id="birthdate" size="10" value="" class="input-mini date" placeholder="дд/мм/гггг" />
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="phone_mobile">Мобильный телефон</label>
+		<div class="controls">
+			<input type="text" name="phone_mobile" id="phone_mobile" value="" placeholder="8XXXXXXXXXX" />
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="phone_home">Домашний телефон</label>
+		<div class="controls">
+			<input type="text" name="phone_home" id="phone_home" value="" placeholder="8XXXXXXXXXX" />
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label class="control-label" for="client_declared_credit_history">Кредитная история (со слов клиента)</label>
+		<div class="controls">
+			<select name="client_declared_credit_history" id="client_declared_credit_history">
+				<option value="1" id="client_declared_credit_history.0">Хорошая</option>
+				<option value="2" id="client_declared_credit_history.1">Плохая</option>
+				<option value="3" id="client_declared_credit_history.2">Не брал кредитов</option>
+				<option value="4" id="client_declared_credit_history.3" selected="selected">Не знаю</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="form-actions">
+		<input type="submit" name="submit" id="submit" value="Отправить данные" class="btn" />
+	</div>
+</form>

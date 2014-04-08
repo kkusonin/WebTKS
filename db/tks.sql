@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 	`phone_mobile` varchar(18) NOT NULL default '',
 	`phone_home` varchar(18) NOT NULL default '',
 	`client_declared_credit_history` ENUM('GOOD','BAD','NOT EXISTENT ','UNKNOWN'),
+	`utm_content` varchar(3) NOT NULL default '',
 	`creation_time` timestamp DEFAULT CURRENT_TIMESTAMP,
 	`uuid` char(32) NOT NULL default '0',
 	`entry_time` timestamp NOT NULL default '0000-00-00 00:00:00',

@@ -10,6 +10,9 @@ __PACKAGE__->config(
         dsn => 'dbi:mysql:tks',
         user => 'tks',
         password => '12345',
+		AutoCommit        => 1,
+        RaiseError        => 1,
+        mysql_enable_utf8 => 1,
     }
 );
 

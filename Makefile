@@ -20,12 +20,12 @@
 #     LICENSE => q[perl]
 #     NAME => q[WebTKS]
 #     NO_META => q[1]
-#     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.90020], Moose=>q[0] }
+#     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Catalyst::Plugin::Unicode=>q[0], Config::General=>q[0], Catalyst::Runtime=>q[5.90020], Moose=>q[0] }
 #     VERSION => q[0.01]
 #     VERSION_FROM => q[lib/WebTKS.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Orders.t t/model_DB-TKS.t t/view_HTML.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -183,8 +183,152 @@ MAN1PODS = script/webtks_cgi.pl \
 	script/webtks_fastcgi.pl \
 	script/webtks_server.pl \
 	script/webtks_test.pl
-MAN3PODS = lib/WebTKS.pm \
-	lib/WebTKS/Controller/Root.pm
+MAN3PODS = lib/TKS/Schema/Result/Order.pm \
+	lib/Vicidial/Schema/Result/CallLog.pm \
+	lib/Vicidial/Schema/Result/CallLogArchive.pm \
+	lib/Vicidial/Schema/Result/GroupsAlias.pm \
+	lib/Vicidial/Schema/Result/InboundNumber.pm \
+	lib/Vicidial/Schema/Result/LiveChannel.pm \
+	lib/Vicidial/Schema/Result/LiveInbound.pm \
+	lib/Vicidial/Schema/Result/LiveInboundLog.pm \
+	lib/Vicidial/Schema/Result/LiveSipChannel.pm \
+	lib/Vicidial/Schema/Result/ParkLog.pm \
+	lib/Vicidial/Schema/Result/ParkedChannel.pm \
+	lib/Vicidial/Schema/Result/Phone.pm \
+	lib/Vicidial/Schema/Result/PhoneFavorite.pm \
+	lib/Vicidial/Schema/Result/PhonesAlias.pm \
+	lib/Vicidial/Schema/Result/RecordingLog.pm \
+	lib/Vicidial/Schema/Result/Server.pm \
+	lib/Vicidial/Schema/Result/ServerPerformance.pm \
+	lib/Vicidial/Schema/Result/ServerUpdater.pm \
+	lib/Vicidial/Schema/Result/SystemSetting.pm \
+	lib/Vicidial/Schema/Result/TwodayCallLog.pm \
+	lib/Vicidial/Schema/Result/TwodayRecordingLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/UserCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAdminLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSph.pm \
+	lib/Vicidial/Schema/Result/VicidialApiLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAutoCall.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenu.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNote.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialCallback.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStat.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialConfTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialConference.pm \
+	lib/Vicidial/Schema/Result/VicidialCpdLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomCid.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialDidLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm \
+	lib/Vicidial/Schema/Result/VicidialDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm \
+	lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialHopper.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundDid.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialIvr.pm \
+	lib/Vicidial/Schema/Result/VicidialLead.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadFilter.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialList.pm \
+	lib/Vicidial/Schema/Result/VicidialListAltPhone.pm \
+	lib/Vicidial/Schema/Result/VicidialListPin.pm \
+	lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm \
+	lib/Vicidial/Schema/Result/VicidialListsField.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtended.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialManager.pm \
+	lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm \
+	lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialOverrideId.pm \
+	lib/Vicidial/Schema/Result/VicidialPauseCode.pm \
+	lib/Vicidial/Schema/Result/VicidialPhoneCode.pm \
+	lib/Vicidial/Schema/Result/VicidialPostalCode.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm \
+	lib/Vicidial/Schema/Result/VicidialQcCode.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScreenLabel.pm \
+	lib/Vicidial/Schema/Result/VicidialScript.pm \
+	lib/Vicidial/Schema/Result/VicidialServerCarrier.pm \
+	lib/Vicidial/Schema/Result/VicidialServerTrunk.pm \
+	lib/Vicidial/Schema/Result/VicidialSessionData.pm \
+	lib/Vicidial/Schema/Result/VicidialShift.pm \
+	lib/Vicidial/Schema/Result/VicidialStateCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialStation.pm \
+	lib/Vicidial/Schema/Result/VicidialStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialStatusCategory.pm \
+	lib/Vicidial/Schema/Result/VicidialTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm \
+	lib/Vicidial/Schema/Result/VicidialUrlLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUser.pm \
+	lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUserGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialUserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm \
+	lib/Vicidial/Schema/Result/VicidialVoicemail.pm \
+	lib/Vicidial/Schema/Result/VicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/VicidialXferPreset.pm \
+	lib/Vicidial/Schema/Result/VicidialXferStat.pm \
+	lib/Vicidial/Schema/Result/VtigerRankData.pm \
+	lib/Vicidial/Schema/Result/VtigerRankParameter.pm \
+	lib/Vicidial/Schema/Result/VtigerVicidialRole.pm \
+	lib/Vicidial/Schema/Result/WebClientSession.pm \
+	lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm \
+	lib/WebTKS.pm \
+	lib/WebTKS/Controller/Orders.pm \
+	lib/WebTKS/Controller/Root.pm \
+	lib/WebTKS/Model/DB/TKS.pm \
+	lib/WebTKS/Model/DB/Vicidial.pm \
+	lib/WebTKS/View/HTML.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIB)$(DFSEP)Config.pm $(PERL_INC)$(DFSEP)config.h
@@ -206,13 +350,457 @@ PERL_ARCHIVE       = $(PERL_INC)\perl516.lib
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/WebTKS.pm \
-	lib/WebTKS/Controller/Root.pm
-
-PM_TO_BLIB = lib/WebTKS/Controller/Root.pm \
-	blib\lib\WebTKS\Controller\Root.pm \
+TO_INST_PM = lib/TKS/Schema.pm \
+	lib/TKS/Schema/Result/Order.pm \
+	lib/Vicidial/Schema.pm \
+	lib/Vicidial/Schema/Result/CallLog.pm \
+	lib/Vicidial/Schema/Result/CallLogArchive.pm \
+	lib/Vicidial/Schema/Result/GroupsAlias.pm \
+	lib/Vicidial/Schema/Result/InboundNumber.pm \
+	lib/Vicidial/Schema/Result/LiveChannel.pm \
+	lib/Vicidial/Schema/Result/LiveInbound.pm \
+	lib/Vicidial/Schema/Result/LiveInboundLog.pm \
+	lib/Vicidial/Schema/Result/LiveSipChannel.pm \
+	lib/Vicidial/Schema/Result/ParkLog.pm \
+	lib/Vicidial/Schema/Result/ParkedChannel.pm \
+	lib/Vicidial/Schema/Result/Phone.pm \
+	lib/Vicidial/Schema/Result/PhoneFavorite.pm \
+	lib/Vicidial/Schema/Result/PhonesAlias.pm \
+	lib/Vicidial/Schema/Result/RecordingLog.pm \
+	lib/Vicidial/Schema/Result/Server.pm \
+	lib/Vicidial/Schema/Result/ServerPerformance.pm \
+	lib/Vicidial/Schema/Result/ServerUpdater.pm \
+	lib/Vicidial/Schema/Result/SystemSetting.pm \
+	lib/Vicidial/Schema/Result/TwodayCallLog.pm \
+	lib/Vicidial/Schema/Result/TwodayRecordingLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialLog.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/UserCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAdminLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSph.pm \
+	lib/Vicidial/Schema/Result/VicidialApiLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAutoCall.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenu.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNote.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialCallback.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStat.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialConfTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialConference.pm \
+	lib/Vicidial/Schema/Result/VicidialCpdLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomCid.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialDidLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm \
+	lib/Vicidial/Schema/Result/VicidialDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm \
+	lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialHopper.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundDid.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialIvr.pm \
+	lib/Vicidial/Schema/Result/VicidialLead.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadFilter.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialList.pm \
+	lib/Vicidial/Schema/Result/VicidialListAltPhone.pm \
+	lib/Vicidial/Schema/Result/VicidialListPin.pm \
+	lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm \
+	lib/Vicidial/Schema/Result/VicidialListsField.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtended.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialManager.pm \
+	lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm \
+	lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialOverrideId.pm \
+	lib/Vicidial/Schema/Result/VicidialPauseCode.pm \
+	lib/Vicidial/Schema/Result/VicidialPhoneCode.pm \
+	lib/Vicidial/Schema/Result/VicidialPostalCode.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm \
+	lib/Vicidial/Schema/Result/VicidialQcCode.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScreenLabel.pm \
+	lib/Vicidial/Schema/Result/VicidialScript.pm \
+	lib/Vicidial/Schema/Result/VicidialServerCarrier.pm \
+	lib/Vicidial/Schema/Result/VicidialServerTrunk.pm \
+	lib/Vicidial/Schema/Result/VicidialSessionData.pm \
+	lib/Vicidial/Schema/Result/VicidialShift.pm \
+	lib/Vicidial/Schema/Result/VicidialStateCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialStation.pm \
+	lib/Vicidial/Schema/Result/VicidialStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialStatusCategory.pm \
+	lib/Vicidial/Schema/Result/VicidialTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm \
+	lib/Vicidial/Schema/Result/VicidialUrlLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUser.pm \
+	lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUserGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialUserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm \
+	lib/Vicidial/Schema/Result/VicidialVoicemail.pm \
+	lib/Vicidial/Schema/Result/VicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/VicidialXferPreset.pm \
+	lib/Vicidial/Schema/Result/VicidialXferStat.pm \
+	lib/Vicidial/Schema/Result/VtigerRankData.pm \
+	lib/Vicidial/Schema/Result/VtigerRankParameter.pm \
+	lib/Vicidial/Schema/Result/VtigerVicidialRole.pm \
+	lib/Vicidial/Schema/Result/WebClientSession.pm \
+	lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm \
 	lib/WebTKS.pm \
-	blib\lib\WebTKS.pm
+	lib/WebTKS/Controller/Orders.pm \
+	lib/WebTKS/Controller/Root.pm \
+	lib/WebTKS/Form/Base.pm \
+	lib/WebTKS/Form/Order.pm \
+	lib/WebTKS/Model/DB/TKS.pm \
+	lib/WebTKS/Model/DB/Vicidial.pm \
+	lib/WebTKS/View/HTML.pm
+
+PM_TO_BLIB = lib/WebTKS/Form/Base.pm \
+	blib\lib\WebTKS\Form\Base.pm \
+	lib/Vicidial/Schema/Result/ServerPerformance.pm \
+	blib\lib\Vicidial\Schema\Result\ServerPerformance.pm \
+	lib/Vicidial/Schema/Result/VicidialUser.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUser.pm \
+	lib/Vicidial/Schema/Result/VicidialStatusCategory.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialStatusCategory.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAdminLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAdminLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScript.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialScript.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialProcessTriggerLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignHotkey.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCloserLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaign.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCarrierLog.pm \
+	lib/Vicidial/Schema.pm \
+	blib\lib\Vicidial\Schema.pm \
+	lib/Vicidial/Schema/Result/VicidialLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLeadSearchLog.pm \
+	lib/Vicidial/Schema/Result/VicidialList.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialList.pm \
+	lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUserCloserLog.pm \
+	lib/Vicidial/Schema/Result/VtigerRankData.pm \
+	blib\lib\Vicidial\Schema\Result\VtigerRankData.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLogNoanswer.pm \
+	lib/Vicidial/Schema/Result/VicidialConference.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialConference.pm \
+	lib/Vicidial/Schema/Result/VicidialIvr.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialIvr.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignAgent.pm \
+	lib/WebTKS/Form/Order.pm \
+	blib\lib\WebTKS\Form\Order.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialTimeclockAuditLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLogNoanswerArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialManualDialQueue.pm \
+	lib/Vicidial/Schema/Result/VicidialVoicemail.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialVoicemail.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritory.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUserTerritory.pm \
+	lib/Vicidial/Schema/Result/Phone.pm \
+	blib\lib\Vicidial\Schema\Result\Phone.pm \
+	lib/Vicidial/Schema/Result/Server.pm \
+	blib\lib\Vicidial\Schema\Result\Server.pm \
+	lib/Vicidial/Schema/Result/VicidialXferStat.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialXferStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDailyMaxStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDailyRaStat.pm \
+	lib/Vicidial/Schema/Result/WebClientSession.pm \
+	blib\lib\Vicidial\Schema\Result\WebClientSession.pm \
+	lib/Vicidial/Schema/Result/VicidialSessionData.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialSessionData.pm \
+	lib/Vicidial/Schema/Result/VicidialConfTemplate.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialConfTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialStation.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialStation.pm \
+	lib/Vicidial/Schema/Result/ParkedChannel.pm \
+	blib\lib\Vicidial\Schema\Result\ParkedChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialDidLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDidLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScreenLabel.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialScreenLabel.pm \
+	lib/Vicidial/Schema/Result/VtigerRankParameter.pm \
+	blib\lib\Vicidial\Schema\Result\VtigerRankParameter.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtended.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLogExtended.pm \
+	lib/Vicidial/Schema/Result/RecordingLog.pm \
+	blib\lib\Vicidial\Schema\Result\RecordingLog.pm \
+	lib/Vicidial/Schema/Result/VtigerVicidialRole.pm \
+	blib\lib\Vicidial\Schema\Result\VtigerVicidialRole.pm \
+	lib/Vicidial/Schema/Result/VicidialXferLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveInboundLog.pm \
+	blib\lib\Vicidial\Schema\Result\LiveInboundLog.pm \
+	lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialNanpaPrefixCode.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignCidAreacode.pm \
+	lib/Vicidial/Schema/Result/VicidialAutoCall.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAutoCall.pm \
+	lib/Vicidial/Schema/Result/VicidialQcCode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialQcCode.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayVicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomCid.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCustomCid.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayVicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialMusicOnHold.pm \
+	lib/Vicidial/Schema/Result/VicidialLead.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLead.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLeadSearchLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAgentSkipLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignStatsDebug.pm \
+	lib/Vicidial/Schema/Result/VicidialPauseCode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialPauseCode.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroup.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialInboundGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallMenuOption.pm \
+	lib/Vicidial/Schema/Result/UserCallLog.pm \
+	blib\lib\Vicidial\Schema\Result\UserCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialXferPreset.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialXferPreset.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialMusicOnHoldFiles.pm \
+	lib/Vicidial/Schema/Result/LiveSipChannel.pm \
+	blib\lib\Vicidial\Schema\Result\LiveSipChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialListPin.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialListPin.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayVicidialLog.pm \
+	lib/WebTKS/Controller/Orders.pm \
+	blib\lib\WebTKS\Controller\Orders.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenu.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallMenu.pm \
+	lib/Vicidial/Schema/Result/VicidialHopper.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialHopper.pm \
+	lib/Vicidial/Schema/Result/VicidialListAltPhone.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialListAltPhone.pm \
+	lib/Vicidial/Schema/Result/InboundNumber.pm \
+	blib\lib\Vicidial\Schema\Result\InboundNumber.pm \
+	lib/Vicidial/Schema/Result/PhoneFavorite.pm \
+	blib\lib\Vicidial\Schema\Result\PhoneFavorite.pm \
+	lib/WebTKS/Model/DB/Vicidial.pm \
+	blib\lib\WebTKS\Model\DB\Vicidial.pm \
+	lib/Vicidial/Schema/Result/PhonesAlias.pm \
+	blib\lib\Vicidial\Schema\Result\PhonesAlias.pm \
+	lib/Vicidial/Schema/Result/VicidialDnc.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUserTerritoryLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSph.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAgentSph.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDidAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLogExtendedArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCustomLeadloaderTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLeadRecycle.pm \
+	lib/Vicidial/Schema/Result/VicidialServerCarrier.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialServerCarrier.pm \
+	lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialListUpdateLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialTtsPrompt.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCarrierLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialRemoteAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignsListMix.pm \
+	lib/Vicidial/Schema/Result/ServerUpdater.pm \
+	blib\lib\Vicidial\Schema\Result\ServerUpdater.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadFilter.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLeadFilter.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialProcessTrigger.pm \
+	lib/Vicidial/Schema/Result/CallLog.pm \
+	blib\lib\Vicidial\Schema\Result\CallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallNotesArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDidAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialGrabCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialServerTrunk.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialServerTrunk.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStat.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignStat.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayVicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveChannel.pm \
+	blib\lib\Vicidial\Schema\Result\LiveChannel.pm \
+	lib/WebTKS/Model/DB/TKS.pm \
+	blib\lib\WebTKS\Model\DB\TKS.pm \
+	lib/WebTKS.pm \
+	blib\lib\WebTKS.pm \
+	lib/Vicidial/Schema/Result/CallLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\CallLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialOutboundIvrLog.pm \
+	lib/Vicidial/Schema/Result/VicidialStateCallTime.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialStateCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialTerritory.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLiveInboundAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialListsField.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialListsField.pm \
+	lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDropRateGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialManager.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialManager.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignServerStat.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialInboundGroupAgent.pm \
+	lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm \
+	blib\lib\Vicidial\Schema\ResultSet\VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialOverrideId.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialOverrideId.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialTimeclockStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialTimeclockLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialPhoneCode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialPhoneCode.pm \
+	lib/Vicidial/Schema/Result/VicidialUserLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallTime.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallTime.pm \
+	lib/Vicidial/Schema/Result/SystemSetting.pm \
+	blib\lib\Vicidial\Schema\Result\SystemSetting.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialFilterPhoneGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundDid.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialInboundDid.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialRemoteAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCampaignDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialFilterPhoneNumber.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialDidRaExtension.pm \
+	lib/Vicidial/Schema/Result/VicidialPostalCode.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialPostalCode.pm \
+	lib/WebTKS/View/HTML.pm \
+	blib\lib\WebTKS\View\HTML.pm \
+	lib/Vicidial/Schema/Result/LiveInbound.pm \
+	blib\lib\Vicidial\Schema\Result\LiveInbound.pm \
+	lib/Vicidial/Schema/Result/VicidialStatus.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialStatus.pm \
+	lib/Vicidial/Schema/Result/TwodayRecordingLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayRecordingLog.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialOutboundIvrLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialUserGroup.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUserGroup.pm \
+	lib/TKS/Schema.pm \
+	blib\lib\TKS\Schema.pm \
+	lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialExtensionGroup.pm \
+	lib/TKS/Schema/Result/Order.pm \
+	blib\lib\TKS\Schema\Result\Order.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveAgent.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialLiveAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialShift.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialShift.pm \
+	lib/Vicidial/Schema/Result/VicidialApiLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialApiLog.pm \
+	lib/WebTKS/Controller/Root.pm \
+	blib\lib\WebTKS\Controller\Root.pm \
+	lib/Vicidial/Schema/Result/VicidialCpdLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCpdLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallback.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallback.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNote.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialCallNote.pm \
+	lib/Vicidial/Schema/Result/TwodayCallLog.pm \
+	blib\lib\Vicidial\Schema\Result\TwodayCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUrlLog.pm \
+	blib\lib\Vicidial\Schema\Result\VicidialUrlLog.pm \
+	lib/Vicidial/Schema/Result/ParkLog.pm \
+	blib\lib\Vicidial\Schema\Result\ParkLog.pm \
+	lib/Vicidial/Schema/Result/GroupsAlias.pm \
+	blib\lib\Vicidial\Schema\Result\GroupsAlias.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -438,8 +1026,152 @@ manifypods : pure_all  \
 	script/webtks_test.pl \
 	script/webtks_fastcgi.pl \
 	script/webtks_cgi.pl \
+	lib/Vicidial/Schema/Result/ServerPerformance.pm \
+	lib/Vicidial/Schema/Result/VicidialUser.pm \
+	lib/Vicidial/Schema/Result/VicidialStatusCategory.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAdminLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScript.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm \
+	lib/Vicidial/Schema/Result/VicidialList.pm \
+	lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm \
+	lib/Vicidial/Schema/Result/VtigerRankData.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm \
+	lib/Vicidial/Schema/Result/VicidialConference.pm \
+	lib/Vicidial/Schema/Result/VicidialIvr.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm \
+	lib/Vicidial/Schema/Result/VicidialVoicemail.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritory.pm \
+	lib/Vicidial/Schema/Result/Phone.pm \
+	lib/Vicidial/Schema/Result/Server.pm \
+	lib/Vicidial/Schema/Result/VicidialXferStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm \
+	lib/Vicidial/Schema/Result/WebClientSession.pm \
+	lib/Vicidial/Schema/Result/VicidialSessionData.pm \
+	lib/Vicidial/Schema/Result/VicidialConfTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialStation.pm \
+	lib/Vicidial/Schema/Result/ParkedChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialDidLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScreenLabel.pm \
+	lib/Vicidial/Schema/Result/VtigerRankParameter.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtended.pm \
+	lib/Vicidial/Schema/Result/RecordingLog.pm \
+	lib/Vicidial/Schema/Result/VtigerVicidialRole.pm \
+	lib/Vicidial/Schema/Result/VicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveInboundLog.pm \
+	lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm \
+	lib/Vicidial/Schema/Result/VicidialAutoCall.pm \
+	lib/Vicidial/Schema/Result/VicidialQcCode.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomCid.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm \
+	lib/Vicidial/Schema/Result/VicidialLead.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm \
+	lib/Vicidial/Schema/Result/VicidialPauseCode.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm \
+	lib/Vicidial/Schema/Result/UserCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialXferPreset.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm \
+	lib/Vicidial/Schema/Result/LiveSipChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialListPin.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialLog.pm \
+	lib/WebTKS/Controller/Orders.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenu.pm \
+	lib/Vicidial/Schema/Result/VicidialHopper.pm \
+	lib/Vicidial/Schema/Result/VicidialListAltPhone.pm \
+	lib/Vicidial/Schema/Result/InboundNumber.pm \
+	lib/Vicidial/Schema/Result/PhoneFavorite.pm \
+	lib/WebTKS/Model/DB/Vicidial.pm \
+	lib/Vicidial/Schema/Result/PhonesAlias.pm \
+	lib/Vicidial/Schema/Result/VicidialDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSph.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm \
+	lib/Vicidial/Schema/Result/VicidialServerCarrier.pm \
+	lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm \
+	lib/Vicidial/Schema/Result/ServerUpdater.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadFilter.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm \
+	lib/Vicidial/Schema/Result/CallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialServerTrunk.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStat.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveChannel.pm \
+	lib/WebTKS/Model/DB/TKS.pm \
+	lib/WebTKS.pm \
+	lib/Vicidial/Schema/Result/CallLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm \
+	lib/Vicidial/Schema/Result/VicidialStateCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialListsField.pm \
+	lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialManager.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm \
+	lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialOverrideId.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialPhoneCode.pm \
+	lib/Vicidial/Schema/Result/VicidialUserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallTime.pm \
+	lib/Vicidial/Schema/Result/SystemSetting.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundDid.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm \
+	lib/Vicidial/Schema/Result/VicidialPostalCode.pm \
+	lib/WebTKS/View/HTML.pm \
+	lib/Vicidial/Schema/Result/LiveInbound.pm \
+	lib/Vicidial/Schema/Result/VicidialStatus.pm \
+	lib/Vicidial/Schema/Result/TwodayRecordingLog.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialUserGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm \
+	lib/TKS/Schema/Result/Order.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialShift.pm \
+	lib/Vicidial/Schema/Result/VicidialApiLog.pm \
 	lib/WebTKS/Controller/Root.pm \
-	lib/WebTKS.pm
+	lib/Vicidial/Schema/Result/VicidialCpdLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallback.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNote.pm \
+	lib/Vicidial/Schema/Result/TwodayCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUrlLog.pm \
+	lib/Vicidial/Schema/Result/ParkLog.pm \
+	lib/Vicidial/Schema/Result/GroupsAlias.pm
 	$(NOECHO) $(POD2MAN) --section=1 --perm_rw=$(PERM_RW) \
 	  script/webtks_create.pl $(INST_MAN1DIR)\webtks_create.pl.$(MAN1EXT) \
 	  script/webtks_server.pl $(INST_MAN1DIR)\webtks_server.pl.$(MAN1EXT) \
@@ -447,8 +1179,165 @@ manifypods : pure_all  \
 	  script/webtks_fastcgi.pl $(INST_MAN1DIR)\webtks_fastcgi.pl.$(MAN1EXT) \
 	  script/webtks_cgi.pl $(INST_MAN1DIR)\webtks_cgi.pl.$(MAN1EXT) 
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
-	  lib/WebTKS/Controller/Root.pm $(INST_MAN3DIR)\WebTKS.Controller.Root.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/ServerPerformance.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.ServerPerformance.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUser.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUser.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialStatusCategory.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialStatusCategory.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAgentLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialAdminLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAdminLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialScript.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialScript.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialProcessTriggerLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignHotkey.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCloserLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignStatus.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaign.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaign.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialCarrierLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCarrierLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLeadSearchLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialList.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialList.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUserCloserLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VtigerRankData.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VtigerRankData.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLogNoanswer.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialConference.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialConference.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialIvr.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialIvr.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignAgent.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialTimeclockAuditLog.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLogNoanswerArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialManualDialQueue.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialVoicemail.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialVoicemail.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUserTerritory.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUserTerritory.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/Phone.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.Phone.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/Server.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.Server.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialXferStat.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialXferStat.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDailyMaxStat.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDailyRaStat.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/WebClientSession.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.WebClientSession.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialSessionData.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialSessionData.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialConfTemplate.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialConfTemplate.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialStation.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialStation.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/ParkedChannel.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.ParkedChannel.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDidLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDidLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialScreenLabel.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialScreenLabel.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VtigerRankParameter.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VtigerRankParameter.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLogExtended.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLogExtended.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/RecordingLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.RecordingLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VtigerVicidialRole.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VtigerVicidialRole.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialXferLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialXferLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/LiveInboundLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.LiveInboundLog.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialNanpaPrefixCode.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignCidAreacode.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialAutoCall.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAutoCall.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialQcCode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialQcCode.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayVicidialCloserLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCustomCid.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCustomCid.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayVicidialAgentLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialMusicOnHold.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLead.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLead.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLeadSearchLogArchive.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAgentSkipLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignStatsDebug.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialPauseCode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialPauseCode.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialInboundGroup.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialInboundGroup.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallMenuOption.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/UserCallLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.UserCallLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialXferPreset.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialXferPreset.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialMusicOnHoldFiles.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/LiveSipChannel.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.LiveSipChannel.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialListPin.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialListPin.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayVicidialLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayVicidialLog.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/WebTKS/Controller/Orders.pm $(INST_MAN3DIR)\WebTKS.Controller.Orders.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallMenu.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallMenu.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialHopper.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialHopper.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialListAltPhone.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialListAltPhone.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/InboundNumber.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.InboundNumber.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/PhoneFavorite.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.PhoneFavorite.$(MAN3EXT) \
+	  lib/WebTKS/Model/DB/Vicidial.pm $(INST_MAN3DIR)\WebTKS.Model.DB.Vicidial.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/PhonesAlias.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.PhonesAlias.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDnc.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDnc.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUserTerritoryLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialAgentSph.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAgentSph.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDidAgentLog.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLogExtendedArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCustomLeadloaderTemplate.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLeadRecycle.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialServerCarrier.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialServerCarrier.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialListUpdateLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialTtsPrompt.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCarrierLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialRemoteAgentLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignsListMix.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/ServerUpdater.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.ServerUpdater.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialLeadFilter.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLeadFilter.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialProcessTrigger.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/CallLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.CallLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallNotesArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDidAgentLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialGrabCallLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialServerTrunk.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialServerTrunk.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStat.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignStat.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayVicidialXferLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/LiveChannel.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.LiveChannel.$(MAN3EXT) \
+	  lib/WebTKS/Model/DB/TKS.pm $(INST_MAN3DIR)\WebTKS.Model.DB.TKS.$(MAN3EXT) \
 	  lib/WebTKS.pm $(INST_MAN3DIR)\WebTKS.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/CallLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.CallLogArchive.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialOutboundIvrLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialStateCallTime.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialStateCallTime.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialTerritory.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialTerritory.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLiveInboundAgent.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialListsField.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialListsField.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDropRateGroup.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialManager.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialManager.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignServerStat.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialInboundGroupAgent.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm $(INST_MAN3DIR)\Vicidial.Schema.ResultSet.VicidialCampaign.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialOverrideId.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialOverrideId.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialTimeclockStatus.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialTimeclockLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCloserLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCloserLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialPhoneCode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialPhoneCode.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUserLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUserLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallTime.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallTime.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/SystemSetting.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.SystemSetting.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialFilterPhoneGroup.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialInboundDid.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialInboundDid.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialRemoteAgent.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCampaignDnc.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialFilterPhoneNumber.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialAgentLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialAgentLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialDidRaExtension.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialPostalCode.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialPostalCode.$(MAN3EXT) \
+	  lib/WebTKS/View/HTML.pm $(INST_MAN3DIR)\WebTKS.View.HTML.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/LiveInbound.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.LiveInbound.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialStatus.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialStatus.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayRecordingLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayRecordingLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialOutboundIvrLogArchive.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/VicidialUserGroup.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUserGroup.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialExtensionGroup.$(MAN3EXT) \
+	  lib/TKS/Schema/Result/Order.pm $(INST_MAN3DIR)\TKS.Schema.Result.Order.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialLiveAgent.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialLiveAgent.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialShift.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialShift.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialApiLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialApiLog.$(MAN3EXT) \
+	  lib/WebTKS/Controller/Root.pm $(INST_MAN3DIR)\WebTKS.Controller.Root.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCpdLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCpdLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallback.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallback.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialCallNote.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialCallNote.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/TwodayCallLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.TwodayCallLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/VicidialUrlLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.VicidialUrlLog.$(MAN3EXT) 
+	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/Vicidial/Schema/Result/ParkLog.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.ParkLog.$(MAN3EXT) \
+	  lib/Vicidial/Schema/Result/GroupsAlias.pm $(INST_MAN3DIR)\Vicidial.Schema.Result.GroupsAlias.$(MAN3EXT) 
 
 
 
@@ -465,8 +1354,152 @@ htmlifypods :  \
 	script/webtks_test.pl \
 	script/webtks_fastcgi.pl \
 	script/webtks_cgi.pl \
+	lib/Vicidial/Schema/Result/ServerPerformance.pm \
+	lib/Vicidial/Schema/Result/VicidialUser.pm \
+	lib/Vicidial/Schema/Result/VicidialStatusCategory.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAdminLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScript.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm \
+	lib/Vicidial/Schema/Result/VicidialList.pm \
+	lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm \
+	lib/Vicidial/Schema/Result/VtigerRankData.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm \
+	lib/Vicidial/Schema/Result/VicidialConference.pm \
+	lib/Vicidial/Schema/Result/VicidialIvr.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm \
+	lib/Vicidial/Schema/Result/VicidialVoicemail.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritory.pm \
+	lib/Vicidial/Schema/Result/Phone.pm \
+	lib/Vicidial/Schema/Result/Server.pm \
+	lib/Vicidial/Schema/Result/VicidialXferStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm \
+	lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm \
+	lib/Vicidial/Schema/Result/WebClientSession.pm \
+	lib/Vicidial/Schema/Result/VicidialSessionData.pm \
+	lib/Vicidial/Schema/Result/VicidialConfTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialStation.pm \
+	lib/Vicidial/Schema/Result/ParkedChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialDidLog.pm \
+	lib/Vicidial/Schema/Result/VicidialScreenLabel.pm \
+	lib/Vicidial/Schema/Result/VtigerRankParameter.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtended.pm \
+	lib/Vicidial/Schema/Result/RecordingLog.pm \
+	lib/Vicidial/Schema/Result/VtigerVicidialRole.pm \
+	lib/Vicidial/Schema/Result/VicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveInboundLog.pm \
+	lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm \
+	lib/Vicidial/Schema/Result/VicidialAutoCall.pm \
+	lib/Vicidial/Schema/Result/VicidialQcCode.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomCid.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm \
+	lib/Vicidial/Schema/Result/VicidialLead.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm \
+	lib/Vicidial/Schema/Result/VicidialPauseCode.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm \
+	lib/Vicidial/Schema/Result/UserCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialXferPreset.pm \
+	lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm \
+	lib/Vicidial/Schema/Result/LiveSipChannel.pm \
+	lib/Vicidial/Schema/Result/VicidialListPin.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialLog.pm \
+	lib/WebTKS/Controller/Orders.pm \
+	lib/Vicidial/Schema/Result/VicidialCallMenu.pm \
+	lib/Vicidial/Schema/Result/VicidialHopper.pm \
+	lib/Vicidial/Schema/Result/VicidialListAltPhone.pm \
+	lib/Vicidial/Schema/Result/InboundNumber.pm \
+	lib/Vicidial/Schema/Result/PhoneFavorite.pm \
+	lib/WebTKS/Model/DB/Vicidial.pm \
+	lib/Vicidial/Schema/Result/PhonesAlias.pm \
+	lib/Vicidial/Schema/Result/VicidialDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentSph.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm \
+	lib/Vicidial/Schema/Result/VicidialServerCarrier.pm \
+	lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm \
+	lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm \
+	lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm \
+	lib/Vicidial/Schema/Result/ServerUpdater.pm \
+	lib/Vicidial/Schema/Result/VicidialLeadFilter.pm \
+	lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm \
+	lib/Vicidial/Schema/Result/CallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialServerTrunk.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignStat.pm \
+	lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm \
+	lib/Vicidial/Schema/Result/LiveChannel.pm \
+	lib/WebTKS/Model/DB/TKS.pm \
+	lib/WebTKS.pm \
+	lib/Vicidial/Schema/Result/CallLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm \
+	lib/Vicidial/Schema/Result/VicidialStateCallTime.pm \
+	lib/Vicidial/Schema/Result/VicidialTerritory.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialListsField.pm \
+	lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialManager.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm \
+	lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm \
+	lib/Vicidial/Schema/Result/VicidialOverrideId.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm \
+	lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCloserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialPhoneCode.pm \
+	lib/Vicidial/Schema/Result/VicidialUserLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallTime.pm \
+	lib/Vicidial/Schema/Result/SystemSetting.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialInboundDid.pm \
+	lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm \
+	lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm \
+	lib/Vicidial/Schema/Result/VicidialAgentLog.pm \
+	lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm \
+	lib/Vicidial/Schema/Result/VicidialPostalCode.pm \
+	lib/WebTKS/View/HTML.pm \
+	lib/Vicidial/Schema/Result/LiveInbound.pm \
+	lib/Vicidial/Schema/Result/VicidialStatus.pm \
+	lib/Vicidial/Schema/Result/TwodayRecordingLog.pm \
+	lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm \
+	lib/Vicidial/Schema/Result/VicidialUserGroup.pm \
+	lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm \
+	lib/TKS/Schema/Result/Order.pm \
+	lib/Vicidial/Schema/Result/VicidialLiveAgent.pm \
+	lib/Vicidial/Schema/Result/VicidialShift.pm \
+	lib/Vicidial/Schema/Result/VicidialApiLog.pm \
 	lib/WebTKS/Controller/Root.pm \
-	lib/WebTKS.pm
+	lib/Vicidial/Schema/Result/VicidialCpdLog.pm \
+	lib/Vicidial/Schema/Result/VicidialCallback.pm \
+	lib/Vicidial/Schema/Result/VicidialCallNote.pm \
+	lib/Vicidial/Schema/Result/TwodayCallLog.pm \
+	lib/Vicidial/Schema/Result/VicidialUrlLog.pm \
+	lib/Vicidial/Schema/Result/ParkLog.pm \
+	lib/Vicidial/Schema/Result/GroupsAlias.pm
 	$(NOECHO) $(POD2HTML)
 
 
@@ -847,7 +1880,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Orders.t t/model_DB-TKS.t t/view_HTML.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -880,6 +1913,7 @@ ppd :
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Catalyst::Action::RenderView\" />" >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Catalyst::Plugin::ConfigLoader\" />" >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Catalyst::Plugin::Static::Simple\" />" >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Catalyst::Plugin::Unicode\" />" >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Catalyst::Runtime\" VERSION=\"5.9002\" />" >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Config::General\" />" >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) "        <REQUIRE NAME=\"Moose::\" />" >> $(DISTNAME).ppd
@@ -894,8 +1928,168 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/WebTKS/Form/Base.pm blib\lib\WebTKS\Form\Base.pm \
+	  lib/Vicidial/Schema/Result/ServerPerformance.pm blib\lib\Vicidial\Schema\Result\ServerPerformance.pm \
+	  lib/Vicidial/Schema/Result/VicidialUser.pm blib\lib\Vicidial\Schema\Result\VicidialUser.pm \
+	  lib/Vicidial/Schema/Result/VicidialStatusCategory.pm blib\lib\Vicidial\Schema\Result\VicidialStatusCategory.pm \
+	  lib/Vicidial/Schema/Result/VicidialAgentLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialAgentLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialAdminLog.pm blib\lib\Vicidial\Schema\Result\VicidialAdminLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialScript.pm blib\lib\Vicidial\Schema\Result\VicidialScript.pm \
+	  lib/Vicidial/Schema/Result/VicidialProcessTriggerLog.pm blib\lib\Vicidial\Schema\Result\VicidialProcessTriggerLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignHotkey.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignHotkey.pm \
+	  lib/Vicidial/Schema/Result/VicidialCloserLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialCloserLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStatus.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignStatus.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaign.pm blib\lib\Vicidial\Schema\Result\VicidialCampaign.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialCarrierLog.pm blib\lib\Vicidial\Schema\Result\VicidialCarrierLog.pm \
+	  lib/Vicidial/Schema.pm blib\lib\Vicidial\Schema.pm \
+	  lib/Vicidial/Schema/Result/VicidialLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialLeadSearchLog.pm blib\lib\Vicidial\Schema\Result\VicidialLeadSearchLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialList.pm blib\lib\Vicidial\Schema\Result\VicidialList.pm \
+	  lib/Vicidial/Schema/Result/VicidialUserCloserLog.pm blib\lib\Vicidial\Schema\Result\VicidialUserCloserLog.pm \
+	  lib/Vicidial/Schema/Result/VtigerRankData.pm blib\lib\Vicidial\Schema\Result\VtigerRankData.pm \
+	  lib/Vicidial/Schema/Result/VicidialLogNoanswer.pm blib\lib\Vicidial\Schema\Result\VicidialLogNoanswer.pm \
+	  lib/Vicidial/Schema/Result/VicidialConference.pm blib\lib\Vicidial\Schema\Result\VicidialConference.pm \
+	  lib/Vicidial/Schema/Result/VicidialIvr.pm blib\lib\Vicidial\Schema\Result\VicidialIvr.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignAgent.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignAgent.pm \
+	  lib/WebTKS/Form/Order.pm blib\lib\WebTKS\Form\Order.pm \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockAuditLog.pm blib\lib\Vicidial\Schema\Result\VicidialTimeclockAuditLog.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialLogNoanswerArchive.pm blib\lib\Vicidial\Schema\Result\VicidialLogNoanswerArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialManualDialQueue.pm blib\lib\Vicidial\Schema\Result\VicidialManualDialQueue.pm \
+	  lib/Vicidial/Schema/Result/VicidialVoicemail.pm blib\lib\Vicidial\Schema\Result\VicidialVoicemail.pm \
+	  lib/Vicidial/Schema/Result/VicidialUserTerritory.pm blib\lib\Vicidial\Schema\Result\VicidialUserTerritory.pm \
+	  lib/Vicidial/Schema/Result/Phone.pm blib\lib\Vicidial\Schema\Result\Phone.pm \
+	  lib/Vicidial/Schema/Result/Server.pm blib\lib\Vicidial\Schema\Result\Server.pm \
+	  lib/Vicidial/Schema/Result/VicidialXferStat.pm blib\lib\Vicidial\Schema\Result\VicidialXferStat.pm \
+	  lib/Vicidial/Schema/Result/VicidialDailyMaxStat.pm blib\lib\Vicidial\Schema\Result\VicidialDailyMaxStat.pm \
+	  lib/Vicidial/Schema/Result/VicidialDailyRaStat.pm blib\lib\Vicidial\Schema\Result\VicidialDailyRaStat.pm \
+	  lib/Vicidial/Schema/Result/WebClientSession.pm blib\lib\Vicidial\Schema\Result\WebClientSession.pm \
+	  lib/Vicidial/Schema/Result/VicidialSessionData.pm blib\lib\Vicidial\Schema\Result\VicidialSessionData.pm \
+	  lib/Vicidial/Schema/Result/VicidialConfTemplate.pm blib\lib\Vicidial\Schema\Result\VicidialConfTemplate.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialStation.pm blib\lib\Vicidial\Schema\Result\VicidialStation.pm \
+	  lib/Vicidial/Schema/Result/ParkedChannel.pm blib\lib\Vicidial\Schema\Result\ParkedChannel.pm \
+	  lib/Vicidial/Schema/Result/VicidialDidLog.pm blib\lib\Vicidial\Schema\Result\VicidialDidLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialScreenLabel.pm blib\lib\Vicidial\Schema\Result\VicidialScreenLabel.pm \
+	  lib/Vicidial/Schema/Result/VtigerRankParameter.pm blib\lib\Vicidial\Schema\Result\VtigerRankParameter.pm \
+	  lib/Vicidial/Schema/Result/VicidialLogExtended.pm blib\lib\Vicidial\Schema\Result\VicidialLogExtended.pm \
+	  lib/Vicidial/Schema/Result/RecordingLog.pm blib\lib\Vicidial\Schema\Result\RecordingLog.pm \
+	  lib/Vicidial/Schema/Result/VtigerVicidialRole.pm blib\lib\Vicidial\Schema\Result\VtigerVicidialRole.pm \
+	  lib/Vicidial/Schema/Result/VicidialXferLog.pm blib\lib\Vicidial\Schema\Result\VicidialXferLog.pm \
+	  lib/Vicidial/Schema/Result/LiveInboundLog.pm blib\lib\Vicidial\Schema\Result\LiveInboundLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialNanpaPrefixCode.pm blib\lib\Vicidial\Schema\Result\VicidialNanpaPrefixCode.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignCidAreacode.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignCidAreacode.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialAutoCall.pm blib\lib\Vicidial\Schema\Result\VicidialAutoCall.pm \
+	  lib/Vicidial/Schema/Result/VicidialQcCode.pm blib\lib\Vicidial\Schema\Result\VicidialQcCode.pm \
+	  lib/Vicidial/Schema/Result/TwodayVicidialCloserLog.pm blib\lib\Vicidial\Schema\Result\TwodayVicidialCloserLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialLog.pm blib\lib\Vicidial\Schema\Result\VicidialLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCustomCid.pm blib\lib\Vicidial\Schema\Result\VicidialCustomCid.pm \
+	  lib/Vicidial/Schema/Result/TwodayVicidialAgentLog.pm blib\lib\Vicidial\Schema\Result\TwodayVicidialAgentLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialMusicOnHold.pm blib\lib\Vicidial\Schema\Result\VicidialMusicOnHold.pm \
+	  lib/Vicidial/Schema/Result/VicidialLead.pm blib\lib\Vicidial\Schema\Result\VicidialLead.pm \
+	  lib/Vicidial/Schema/Result/VicidialLeadSearchLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialLeadSearchLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialAgentSkipLog.pm blib\lib\Vicidial\Schema\Result\VicidialAgentSkipLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStatsDebug.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignStatsDebug.pm \
+	  lib/Vicidial/Schema/Result/VicidialPauseCode.pm blib\lib\Vicidial\Schema\Result\VicidialPauseCode.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialInboundGroup.pm blib\lib\Vicidial\Schema\Result\VicidialInboundGroup.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallMenuOption.pm blib\lib\Vicidial\Schema\Result\VicidialCallMenuOption.pm \
+	  lib/Vicidial/Schema/Result/UserCallLog.pm blib\lib\Vicidial\Schema\Result\UserCallLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialXferPreset.pm blib\lib\Vicidial\Schema\Result\VicidialXferPreset.pm \
+	  lib/Vicidial/Schema/Result/VicidialMusicOnHoldFiles.pm blib\lib\Vicidial\Schema\Result\VicidialMusicOnHoldFiles.pm \
+	  lib/Vicidial/Schema/Result/LiveSipChannel.pm blib\lib\Vicidial\Schema\Result\LiveSipChannel.pm \
+	  lib/Vicidial/Schema/Result/VicidialListPin.pm blib\lib\Vicidial\Schema\Result\VicidialListPin.pm \
+	  lib/Vicidial/Schema/Result/TwodayVicidialLog.pm blib\lib\Vicidial\Schema\Result\TwodayVicidialLog.pm \
+	  lib/WebTKS/Controller/Orders.pm blib\lib\WebTKS\Controller\Orders.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallMenu.pm blib\lib\Vicidial\Schema\Result\VicidialCallMenu.pm \
+	  lib/Vicidial/Schema/Result/VicidialHopper.pm blib\lib\Vicidial\Schema\Result\VicidialHopper.pm \
+	  lib/Vicidial/Schema/Result/VicidialListAltPhone.pm blib\lib\Vicidial\Schema\Result\VicidialListAltPhone.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/InboundNumber.pm blib\lib\Vicidial\Schema\Result\InboundNumber.pm \
+	  lib/Vicidial/Schema/Result/PhoneFavorite.pm blib\lib\Vicidial\Schema\Result\PhoneFavorite.pm \
+	  lib/WebTKS/Model/DB/Vicidial.pm blib\lib\WebTKS\Model\DB\Vicidial.pm \
+	  lib/Vicidial/Schema/Result/PhonesAlias.pm blib\lib\Vicidial\Schema\Result\PhonesAlias.pm \
+	  lib/Vicidial/Schema/Result/VicidialDnc.pm blib\lib\Vicidial\Schema\Result\VicidialDnc.pm \
+	  lib/Vicidial/Schema/Result/VicidialUserTerritoryLog.pm blib\lib\Vicidial\Schema\Result\VicidialUserTerritoryLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialAgentSph.pm blib\lib\Vicidial\Schema\Result\VicidialAgentSph.pm \
+	  lib/Vicidial/Schema/Result/VicidialDidAgentLog.pm blib\lib\Vicidial\Schema\Result\VicidialDidAgentLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialLogExtendedArchive.pm blib\lib\Vicidial\Schema\Result\VicidialLogExtendedArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialCustomLeadloaderTemplate.pm blib\lib\Vicidial\Schema\Result\VicidialCustomLeadloaderTemplate.pm \
+	  lib/Vicidial/Schema/Result/VicidialLeadRecycle.pm blib\lib\Vicidial\Schema\Result\VicidialLeadRecycle.pm \
+	  lib/Vicidial/Schema/Result/VicidialServerCarrier.pm blib\lib\Vicidial\Schema\Result\VicidialServerCarrier.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialListUpdateLog.pm blib\lib\Vicidial\Schema\Result\VicidialListUpdateLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialTtsPrompt.pm blib\lib\Vicidial\Schema\Result\VicidialTtsPrompt.pm \
+	  lib/Vicidial/Schema/Result/VicidialCarrierLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialCarrierLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialRemoteAgentLog.pm blib\lib\Vicidial\Schema\Result\VicidialRemoteAgentLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignsListMix.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignsListMix.pm \
+	  lib/Vicidial/Schema/Result/ServerUpdater.pm blib\lib\Vicidial\Schema\Result\ServerUpdater.pm \
+	  lib/Vicidial/Schema/Result/VicidialLeadFilter.pm blib\lib\Vicidial\Schema\Result\VicidialLeadFilter.pm \
+	  lib/Vicidial/Schema/Result/VicidialProcessTrigger.pm blib\lib\Vicidial\Schema\Result\VicidialProcessTrigger.pm \
+	  lib/Vicidial/Schema/Result/CallLog.pm blib\lib\Vicidial\Schema\Result\CallLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallNotesArchive.pm blib\lib\Vicidial\Schema\Result\VicidialCallNotesArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialDidAgentLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialDidAgentLogArchive.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialGrabCallLog.pm blib\lib\Vicidial\Schema\Result\VicidialGrabCallLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialServerTrunk.pm blib\lib\Vicidial\Schema\Result\VicidialServerTrunk.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignStat.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignStat.pm \
+	  lib/Vicidial/Schema/Result/TwodayVicidialXferLog.pm blib\lib\Vicidial\Schema\Result\TwodayVicidialXferLog.pm \
+	  lib/Vicidial/Schema/Result/LiveChannel.pm blib\lib\Vicidial\Schema\Result\LiveChannel.pm \
+	  lib/WebTKS/Model/DB/TKS.pm blib\lib\WebTKS\Model\DB\TKS.pm \
+	  lib/WebTKS.pm blib\lib\WebTKS.pm \
+	  lib/Vicidial/Schema/Result/CallLogArchive.pm blib\lib\Vicidial\Schema\Result\CallLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialOutboundIvrLog.pm blib\lib\Vicidial\Schema\Result\VicidialOutboundIvrLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialStateCallTime.pm blib\lib\Vicidial\Schema\Result\VicidialStateCallTime.pm \
+	  lib/Vicidial/Schema/Result/VicidialTerritory.pm blib\lib\Vicidial\Schema\Result\VicidialTerritory.pm \
+	  lib/Vicidial/Schema/Result/VicidialLiveInboundAgent.pm blib\lib\Vicidial\Schema\Result\VicidialLiveInboundAgent.pm \
+	  lib/Vicidial/Schema/Result/VicidialListsField.pm blib\lib\Vicidial\Schema\Result\VicidialListsField.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/VicidialDropRateGroup.pm blib\lib\Vicidial\Schema\Result\VicidialDropRateGroup.pm \
+	  lib/Vicidial/Schema/Result/VicidialManager.pm blib\lib\Vicidial\Schema\Result\VicidialManager.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignServerStat.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignServerStat.pm \
+	  lib/Vicidial/Schema/Result/VicidialInboundGroupAgent.pm blib\lib\Vicidial\Schema\Result\VicidialInboundGroupAgent.pm \
+	  lib/Vicidial/Schema/ResultSet/VicidialCampaign.pm blib\lib\Vicidial\Schema\ResultSet\VicidialCampaign.pm \
+	  lib/Vicidial/Schema/Result/VicidialOverrideId.pm blib\lib\Vicidial\Schema\Result\VicidialOverrideId.pm \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockStatus.pm blib\lib\Vicidial\Schema\Result\VicidialTimeclockStatus.pm \
+	  lib/Vicidial/Schema/Result/VicidialTimeclockLog.pm blib\lib\Vicidial\Schema\Result\VicidialTimeclockLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCloserLog.pm blib\lib\Vicidial\Schema\Result\VicidialCloserLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialPhoneCode.pm blib\lib\Vicidial\Schema\Result\VicidialPhoneCode.pm \
+	  lib/Vicidial/Schema/Result/VicidialUserLog.pm blib\lib\Vicidial\Schema\Result\VicidialUserLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallTime.pm blib\lib\Vicidial\Schema\Result\VicidialCallTime.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/SystemSetting.pm blib\lib\Vicidial\Schema\Result\SystemSetting.pm \
+	  lib/Vicidial/Schema/Result/VicidialFilterPhoneGroup.pm blib\lib\Vicidial\Schema\Result\VicidialFilterPhoneGroup.pm \
+	  lib/Vicidial/Schema/Result/VicidialInboundDid.pm blib\lib\Vicidial\Schema\Result\VicidialInboundDid.pm \
+	  lib/Vicidial/Schema/Result/VicidialRemoteAgent.pm blib\lib\Vicidial\Schema\Result\VicidialRemoteAgent.pm \
+	  lib/Vicidial/Schema/Result/VicidialCampaignDnc.pm blib\lib\Vicidial\Schema\Result\VicidialCampaignDnc.pm \
+	  lib/Vicidial/Schema/Result/VicidialFilterPhoneNumber.pm blib\lib\Vicidial\Schema\Result\VicidialFilterPhoneNumber.pm \
+	  lib/Vicidial/Schema/Result/VicidialAgentLog.pm blib\lib\Vicidial\Schema\Result\VicidialAgentLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialDidRaExtension.pm blib\lib\Vicidial\Schema\Result\VicidialDidRaExtension.pm \
+	  lib/Vicidial/Schema/Result/VicidialPostalCode.pm blib\lib\Vicidial\Schema\Result\VicidialPostalCode.pm \
+	  lib/WebTKS/View/HTML.pm blib\lib\WebTKS\View\HTML.pm \
+	  lib/Vicidial/Schema/Result/LiveInbound.pm blib\lib\Vicidial\Schema\Result\LiveInbound.pm \
+	  lib/Vicidial/Schema/Result/VicidialStatus.pm blib\lib\Vicidial\Schema\Result\VicidialStatus.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/TwodayRecordingLog.pm blib\lib\Vicidial\Schema\Result\TwodayRecordingLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialOutboundIvrLogArchive.pm blib\lib\Vicidial\Schema\Result\VicidialOutboundIvrLogArchive.pm \
+	  lib/Vicidial/Schema/Result/VicidialUserGroup.pm blib\lib\Vicidial\Schema\Result\VicidialUserGroup.pm \
+	  lib/TKS/Schema.pm blib\lib\TKS\Schema.pm \
+	  lib/Vicidial/Schema/Result/VicidialExtensionGroup.pm blib\lib\Vicidial\Schema\Result\VicidialExtensionGroup.pm \
+	  lib/TKS/Schema/Result/Order.pm blib\lib\TKS\Schema\Result\Order.pm \
+	  lib/Vicidial/Schema/Result/VicidialLiveAgent.pm blib\lib\Vicidial\Schema\Result\VicidialLiveAgent.pm \
+	  lib/Vicidial/Schema/Result/VicidialShift.pm blib\lib\Vicidial\Schema\Result\VicidialShift.pm \
+	  lib/Vicidial/Schema/Result/VicidialApiLog.pm blib\lib\Vicidial\Schema\Result\VicidialApiLog.pm \
 	  lib/WebTKS/Controller/Root.pm blib\lib\WebTKS\Controller\Root.pm \
-	  lib/WebTKS.pm blib\lib\WebTKS.pm 
+	  lib/Vicidial/Schema/Result/VicidialCpdLog.pm blib\lib\Vicidial\Schema\Result\VicidialCpdLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallback.pm blib\lib\Vicidial\Schema\Result\VicidialCallback.pm \
+	  lib/Vicidial/Schema/Result/VicidialCallNote.pm blib\lib\Vicidial\Schema\Result\VicidialCallNote.pm 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e "pm_to_blib({{@ARGV}}, '$(INST_LIB)\auto', q[$(PM_FILTER)], '$(PERM_DIR)')" -- \
+	  lib/Vicidial/Schema/Result/TwodayCallLog.pm blib\lib\Vicidial\Schema\Result\TwodayCallLog.pm \
+	  lib/Vicidial/Schema/Result/VicidialUrlLog.pm blib\lib\Vicidial\Schema\Result\VicidialUrlLog.pm \
+	  lib/Vicidial/Schema/Result/ParkLog.pm blib\lib\Vicidial\Schema\Result\ParkLog.pm \
+	  lib/Vicidial/Schema/Result/GroupsAlias.pm blib\lib\Vicidial\Schema\Result\GroupsAlias.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 
@@ -932,7 +2126,7 @@ config :: installdeps
 	$(NOECHO) $(NOOP)
 
 checkdeps ::
-	$(PERL) Makefile.PL --checkdeps
+	$(PERL) Makefile.pl --checkdeps
 
 installdeps ::
 	$(NOECHO) $(NOOP)
@@ -941,14 +2135,14 @@ installdeps_notest ::
 	$(NOECHO) $(NOOP)
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90020,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.pl --config= --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90020,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Catalyst::Plugin::Unicode,0,Moose,0,namespace::autoclean,0,Config::General,0
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90020,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.pl --config=notest,1 --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90020,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Catalyst::Plugin::Unicode,0,Moose,0,namespace::autoclean,0,Config::General,0
 
 listdeps ::
 	@$(PERL) -le "print for @ARGV" 
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Test::More Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Action::RenderView Moose namespace::autoclean Config::General
+	@$(PERL) -le "print for @ARGV" Test::More Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Action::RenderView Catalyst::Plugin::Unicode Moose namespace::autoclean Config::General
 

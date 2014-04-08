@@ -20,6 +20,10 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+	   
+    UserAgent
+
+    Unicode
 /;
 
 extends 'Catalyst';
@@ -37,6 +41,13 @@ our $VERSION = '0.01';
 
 __PACKAGE__->config(
     name => 'WebTKS',
+	# encoding => 'UTF-8',
+	# Pass config params to LWP
+    lwp_user_agent => {
+        agent      => 'Application Sender',
+        ssl_opts => { verify_hostname => 1 },
+        timeout => 60,
+    },
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header

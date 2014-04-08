@@ -128,6 +128,13 @@ __PACKAGE__->table("orders");
   extra: {list => ["GOOD","BAD","NOT EXISTENT","UNKNOWN"]}
   is_nullable: 1
 
+=head2 utm_content
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 3
+  
 =head2 creation_time
 
   data_type: 'timestamp'
@@ -187,6 +194,8 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 0,
   },
+  "utm_content",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 3 },
   "phone_number",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 18 },
   "user",
