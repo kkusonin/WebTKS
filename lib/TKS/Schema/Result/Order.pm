@@ -22,13 +22,13 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::InflateColumn::DateTime>
+=item * L<DBIx::Class::FilterColumn>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components(qw(FilterColumn));
 
 =head1 TABLE: C<orders>
 
@@ -134,7 +134,7 @@ __PACKAGE__->table("orders");
   default_value: (empty string)
   is_nullable: 0
   size: 3
-  
+
 =head2 creation_time
 
   data_type: 'timestamp'
@@ -194,8 +194,6 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 0,
   },
-  "utm_content",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 3 },
   "phone_number",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 18 },
   "user",
@@ -225,6 +223,8 @@ __PACKAGE__->add_columns(
     extra => { list => ["GOOD", "BAD", "NOT EXISTENT", "UNKNOWN"] },
     is_nullable => 1,
   },
+  "utm_content",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 3 },
   "creation_time",
   {
     data_type => "timestamp",
@@ -286,10 +286,34 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("idx_lead_seq", ["lead_id", "seq"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-04-06 11:21:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3Q7RdLBLJA30/JCk8ABeUw
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-04-09 06:50:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GB6RkwYpDH5X6ZZgaewwAw
+with 'TKS::Role::SendOrder';
 
+sub wm { $_[0]->user; }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub process {
+	my $self = shift;
+	
+	$self->uuid($self->send_order);
+	$self->update;
+}
+
+sub processed { ($_[0]->uuid) ? 1 : 0 }
+
+__PACKAGE__->filter_column(
+	'birthdate',
+	{
+		filter_to_storage => sub {
+			require DateTime::Format::Strptime;
+			DateTime::Format::Strptime->new(pattern => '%d/%m/%Y')
+						              ->parse_datetime($_[1]);
+		},
+		filter_from_storage => sub {
+			$_[1]->strftime('%d/%m/%Y');
+		},
+	}
+);
+
 __PACKAGE__->meta->make_immutable;
 1;

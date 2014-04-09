@@ -3,12 +3,11 @@ use strict;
 use utf8;
 binmode STDOUT, ":encoding(cp866)";
 use lib 'lib';
-use DBIx::Class::Schema;
-use TKS::Order;
+use TKS::Schema;
 use Try::Tiny;
 use Data::Dumper;
 
-my $schema = DBIx::Class::Schema->connect(
+my $schema = TKS::Schema->connect(
 	'DBI:mysql:tks',
 	'tks',
 	'12345',
@@ -19,18 +18,35 @@ my $schema = DBIx::Class::Schema->connect(
 	}
 );
 
-try {
-	my $order = TKS::Order->new(
-		schema => $schema,
-		name => 'Иван',
-		surname => 'Иванов',
-		lead_id => 923456,
-	);
-	
-	$order->attributes;
+sub birthday {
+	int(rand(28) + 1) . '/' . int(rand(12) + 1) . '/' . int(rand(44) + 1970);
 }
-catch {
-    print $_, "\n";
-	my ($err) = $_ =~ /because:\s+(.*?)\s+at/;
-	print "Запрос не создан: $err\n";
+
+sub history {
+	int(rand(4)) + 1;
+}
+
+my $lead_id = 19197335;
+foreach (1..100) { 
+#try {
+		my $order = $schema->resultset('Order')->create({
+			name => 'Иван',
+			surname => "Иванов",
+			patronymic => '',
+			birthdate => '13/32/1990',
+			phone_mobile => 89219345678,
+			phone_home => 88123322322,
+			client_declared_credit_history => history(),
+			lead_id => $lead_id++,
+			user => 3064,
+		});
+		
+		#$order->uuid($order->send_order(1));
+		#$order->update;
+#	}
+#	catch {
+#		print $_, "\n";
+#	}
+	$lead_id++;
+	sleep 1;
 }

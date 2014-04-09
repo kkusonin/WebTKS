@@ -82,6 +82,8 @@ sub create : POST Chained('orders') PathPart('create') Args(0) {
 	my ( $self, $c ) = @_;
 	my $order_details = $c->req->body_params;
 	
+	
+	$c->detach('error',[500, "Неправильная фамилия: " . $order_details->{surname}]);
 	delete $order_details->{submit};
 	$c->res->redirect($c->uri_for(($c->controller->action_for('add'),$order_details)));
 	
