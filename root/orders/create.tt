@@ -6,23 +6,23 @@
 
 <form class="form-horizontal" id="form545" method="post" accept-charset="utf-8" action=[% c.uri_for(c.controller.action_for('create')) %] >
 <div>
-	<input type="hidden" name="lead_id" id="lead_id" value=[% data.lead_id %] >
-	<input type="hidden" name="user" id="user" value=[% data.user %] >
-	<input type="hidden" name="utm_content" id="utm_content" value=[% data.utm_content %] >
-	<input type="hidden" name="phone_number" id="phone_number" value=[% data.phone_number %] >
-	<input type="hidden" name="full_name" id="full_name" value=[% data.full_name %] >
+	<input type="hidden" name="lead_id" id="lead_id" value="[% data.lead_id %]" >
+	<input type="hidden" name="user" id="user" value="[% data.user %]" >
+	<input type="hidden" name="utm_content" id="utm_content" value="[% data.utm_content %]" >
+	<input type="hidden" name="phone_number" id="phone_number" value="[% data.phone_number %]" >
+	<input type="hidden" name="full_name" id="full_name" value="[% data.full_name %]" >
 	
 	<div class="control-group">
 		<label class="control-label" for="surname">Фамилия *</label>
 		<div class="controls">
-			<input type="text" name="surname" id="surname" value=[% data.surname  %] >
+			<input type="text" name="surname" id="surname" value="[% data.surname  %]" >
 		</div>
 	</div>
 	
 	<div class="control-group">
 		<label class="control-label" for="name">Имя *</label>
 		<div class="controls">
-			<input type="text" name="name" id="name" value=[% data.name %] >
+			<input type="text" name="name" id="name" value="[% data.name %]" >
 		</div>
 	</div>
 
@@ -36,7 +36,7 @@
 	<div class="control-group">
 		<label class="control-label" for="birthdate">Дата рождения</label>
 		<div class="controls">
-			<input type="text" name="birthdate" id="birthdate" size="10" value="" class="input-mini date" placeholder="дд/мм/гггг" >
+			<input type="text" name="birthdate" id="birthdate" size="10" value="[% data.birthdate %]" class="input-mini date" placeholder="дд/мм/гггг" >
 		</div>
 	</div>
 	
@@ -58,10 +58,10 @@
 		<label class="control-label" for="client_declared_credit_history">Кредитная история (со слов клиента)</label>
 		<div class="controls">
 			<select name="client_declared_credit_history" id="client_declared_credit_history">
-				<option value="1" id="client_declared_credit_history.0">Хорошая</option>
-				<option value="2" id="client_declared_credit_history.1">Плохая</option>
-				<option value="3" id="client_declared_credit_history.2">Не брал кредитов</option>
-				<option value="4" id="client_declared_credit_history.3" selected="selected">Не знаю</option>
+				<option value="1" id="client_declared_credit_history.0" [% 'selected' IF option == data.client_declared_credit_history %]>Хорошая</option>
+				<option value="2" id="client_declared_credit_history.1" [% 'selected' IF option == data.client_declared_credit_history %]">Плохая</option>
+				<option value="3" id="client_declared_credit_history.2" [% 'selected' IF option == data.client_declared_credit_history %]>Не брал кредитов</option>
+				<option value="4" id="client_declared_credit_history.3" [% 'selected' IF (option == data.client_declared_credit_history || (! data.client_declared_credit_history.defined)) %]">Не знаю</option>
 			</select>
 		</div>
 	</div>

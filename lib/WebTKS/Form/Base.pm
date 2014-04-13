@@ -1,8 +1,7 @@
 package WebTKS::Form::Base;
 use utf8;
 use HTML::FormHandler::Moose;
-extends 'HTML::FormHandler';
- 
+extends 'HTML::FormHandler::Model::DBIC';
 with 'HTML::FormHandlerX::Form::JQueryValidator';
  
 has_field validation_json => ( type => 'Hidden',  element_attr => { disabled => 'disabled' } );

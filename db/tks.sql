@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 	`client_declared_credit_history` ENUM('GOOD','BAD','NOT EXISTENT ','UNKNOWN'),
 	`utm_content` varchar(3) NOT NULL default '',
 	`creation_time` timestamp DEFAULT CURRENT_TIMESTAMP,
-	`uuid` char(32) NOT NULL default '0',
+	`uuid` char(32) NOT NULL default '',
 	`entry_time` timestamp NOT NULL default '0000-00-00 00:00:00',
 	`update_time` timestamp NOT NULL default '0000-00-00 00:00:00',
 	`uuid_crc` int(10) unsigned NOT NULL default '0',

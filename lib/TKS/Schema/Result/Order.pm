@@ -292,25 +292,31 @@ with 'TKS::Role::SendOrder';
 
 sub wm { $_[0]->user; }
 
-sub process {
-	my $self = shift;
-	
-	$self->uuid($self->send_order);
-	$self->update;
-}
-
 sub processed { ($_[0]->uuid) ? 1 : 0 }
+
+around BUILDARGS => sub {
+    my ($orig, $class, $args) = @_;
+	
+	foreach (keys %$args) {
+		delete $args->{$_} if !defined $args->{$_};
+	}
+	
+	$class->$orig($args);
+};
 
 __PACKAGE__->filter_column(
 	'birthdate',
 	{
 		filter_to_storage => sub {
-			require DateTime::Format::Strptime;
-			DateTime::Format::Strptime->new(pattern => '%d/%m/%Y')
-						              ->parse_datetime($_[1]);
+			if (ref $_[1]) {
+				return $_[1]->strftime('%Y-%m-%d');
+			}
+			else {
+				sprintf "%04d-%02d-%02d",reverse $_[1] =~ /(\d+)\/(\d+)\/(\d+)/;
+			}
 		},
 		filter_from_storage => sub {
-			$_[1]->strftime('%d/%m/%Y');
+			sprintf "%02d/%02d/%04d",reverse $_[1] =~ /(\d+)-(\d+)-(\d+)/;
 		},
 	}
 );

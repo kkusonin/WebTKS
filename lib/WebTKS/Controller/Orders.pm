@@ -4,7 +4,14 @@ use WebTKS::Form::Order;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
+use WebTKS::Form::Order;
 
+has 'edit_form' => ( 
+	isa => 'WebTKS::Form::Order', 
+	is => 'rw',
+    lazy => 1, 
+	default => sub { WebTKS::Form::Order->new } 
+);
 =head1 NAME
 
 WebTKS::Controller::Orders - Catalyst Controller
@@ -38,57 +45,90 @@ sub error :Private {
 	);
 }
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
-
-    $c->response->body('Matched WebTKS::Controller::Orders in Orders.');
+sub show : Chained('order_base') PathPart('') Args(1) {
+	my ( $self, $c, $order_id ) = @_;
+	
+	$c->stash(
+		template => 'orders/show.tt',
+		order => $c->model('DB::TKS::Order')->find($order_id),
+	);
 }
 
-sub orders : Chained('/') PathPart('orders') CaptureArgs(0) {
+sub form_hidden_fields {
+	my ($params) = @_;
+	
+	my $lead_id = $params->{lead_id};
+	my $user = $params->{user};
+	
+	return {
+		lead_id => { default => $lead_id, element_attr => ($lead_id) ? { readonly => 1} : {}},
+		user => { default => $user, element_attr => ($user) ? { readonly => 1} : {} },
+	}
+}
+
+sub order_base : Chained('/') PathPart('orders') CaptureArgs(0) {
 	my ($self, $c) = @_;
-	$c->stash(
-		orders => $c->model('DB::TKS::Order'),
-		leads  => $c->model('DB::Vicidial::VicidialLead'),
-		users  => $c->model('DB::Vicidial::VicidialUser'),
-	);
+	$c->stash( bootstrap => 1 );
 }
 
-sub add : GET Chained('orders') PathPart('create') Args(0) {
-	my ($self, $c ) = @_;
+sub create : Chained('order_base') PathPart('create') Args(0) {
+	my ($self, $c) = @_;
 	
-	my $args = $c->req->query_params;
+	my $lead_id = $c->req->params->{lead_id};
+	my $user_id = $c->req->params->{user};
 	
-	$c->detach('error', [ 404, "Не указан обязательный аргумент: lead_id:" ]) if ! defined $args->{lead_id};
-	$c->detach('error', [ 404, "Не указан обязательный аргумент: user" ]) if ! defined $args->{user};
+	my $lead = $c->model('DB::Vicidial::VicidialLead')->find($lead_id);
+	my $user = $c->model('DB::Vicidial::VicidialUser')->single({ user => $user_id });
 	
-	my $lead = $c->stash->{leads}->find($args->{lead_id});
-	my $user = $c->stash->{users}->single({user => $args->{user}});
-	
-	$c->detach('error', [ 404, "Несуществующий Lead ID:" . $args->{lead_id} ]) if ! $lead;
-	$c->detach('error', [ 404, "Несуществующий оператор:" . $args->{user} ]) if ! $user;
-		
-	$c->stash(
-		data => {
-			%$args,
-			utm_content	 => $lead->country_code,
-			phone_number => $lead->phone_number,
-			full_name	 => $user->full_name,
-		},
-		template => 'orders/create.tt',
-	);
+	# Create the empty order row for the form
+    my $order = $c->model('DB::TKS::Order')->new_result({
+		lead_id		 => $lead_id,
+		phone_number => $lead->phone_number,
+		user         => $user_id,
+		full_name    => $user->full_name,
+	});
+    $DB::single=1;
+
+    $c->stash( order => $order );
+	$c->stash( lead => $lead );
+    return $self->form($c);
 }
 
-sub create : POST Chained('orders') PathPart('create') Args(0) {
-	my ( $self, $c ) = @_;
-	my $order_details = $c->req->body_params;
+sub form {
+	my ($self, $c) = @_;
 	
+	$self->{edit_form} = WebTKS::Form::Order->new(
+		vicidial_schema => $c->model('DB::Vicidial')->schema,
+	);
 	
-	$c->detach('error',[500, "Неправильная фамилия: " . $order_details->{surname}]);
-	delete $order_details->{submit};
-	$c->res->redirect($c->uri_for(($c->controller->action_for('add'),$order_details)));
+	my $posted = $c->req->method eq 'POST';
+	my $result = $self->edit_form->run(
+		posted => $posted,
+		update_field_list => form_hidden_fields($c->req->params),
+		item   => $c->stash->{order},
+		params => $c->req->parameters,
+		action => $c->uri_for($c->action,  $c->req->captures ),
+    );
 	
-	return;
-} 
+	$c->stash( 
+		template => 'orders/create_form.tt', 
+		form => $result 
+	);
+	return unless $result->validated;
+	
+	# Form validated
+	my $order = $c->stash->{order};
+	# Send application form
+	my $result = $c->model('AppSender')->send($order->app_data);
+	# Update order and vicidial_list
+	$order->uuid($result->id);
+	$order->update;
+	my $lead = $c->stash->{lead};
+	$lead->comments($result->id);
+	$lead->update;
+	# Show order 
+	$c->res->redirect( $c->uri_for($c->controller->action_for('show'),$order->id) );
+}
 
 =encoding utf8
 

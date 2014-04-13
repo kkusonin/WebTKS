@@ -5,13 +5,30 @@ extends 'WebTKS::Form::Base';
 with 'HTML::FormHandler::Widget::Theme::Bootstrap';
 use namespace::autoclean;
 
-has '+item_class' => ( default => 'Order' );
+has '+error_message' => ( default => 'Заполненная форма содержит ошибки.' );
+has '+item_class'    => ( default => 'Order' );
 
-has_field 'lead_id' => ( type => 'Hidden' );
-has_field 'phone_number' => ( type => 'Hidden' );
-has_field 'user' => ( type => 'Hidden' );
-has_field 'full_name' => ( type => 'Hidden' );
-has_field 'utm_content' => ( type => 'Hidden' );
+has 'vicidial_schema' => (
+	isa => 'Vicidial::Schema',
+	is => 'ro',
+	required => 1,
+);
+
+has_field 'lead_id' => ( 
+	type => 'Hidden',
+);
+
+has_field 'phone_number' => ( 
+	type => 'Hidden',
+);
+
+has_field 'user' => ( 
+	type => 'Hidden',
+);
+
+has_field 'full_name' => ( 
+	type => 'Hidden',
+);
 
 has_field 'surname' => (
     type => 'Text',
@@ -31,6 +48,8 @@ has_field 'patronymic' => (
     type => 'Text',
     required => 0,
     label => 'Отчество',
+	not_nullable => 1,
+	default => '',
 );
 
 has_field 'birthdate' => ( 
@@ -46,6 +65,8 @@ has_field 'phone_mobile' => (
     apply => [ { check => qr/^8\d{10}/, message => 'Пожалуйста, введите телефонный номер в формате 8ХХХХХХХХХХ' } ],
     element_attr => {placeholder => '8XXXXXXXXXX'},
     label => 'Мобильный телефон',
+	not_nullable => 1,
+	default => '',
 );
 
 has_field 'phone_home' => (
@@ -53,6 +74,8 @@ has_field 'phone_home' => (
     apply => [ { check => qr/^8\d{10}/, message => 'Пожалуйста, введите телефонный номер в формате 8ХХХХХХХХХХ' } ],
     element_attr => {placeholder => '8XXXXXXXXXX'},
     label => 'Домашний телефон',
+	not_nullable => 1,
+	default => '',
 );
 
 
@@ -73,8 +96,28 @@ sub options_client_declared_credit_history {
         3 => 'Не брал кредитов',
         4 => 'Не знаю',
     ];
-   }
+}
 
+#sub validate_user {
+#	my ($self, $field) = @_;
+#	
+#	$self->vicidial_schema
+#		 ->resultset('VicidialUser')
+#		 ->single({user => $field->value }) ||
+#	$field->add_error('Несуществующий оператор');
+#}
+
+#sub validate_lead_id {
+#	my ($self, $field) = @_;
+	
+#	$self->vicidial_schema
+#		 ->resultset('VicidialLead')
+#		 ->find($field->value) ||
+#	$field->add_error('Несуществующий LEAD ID');
+#}
+	
+	
+  
 __PACKAGE__->meta->make_immutable;
 
 1;

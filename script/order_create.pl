@@ -26,27 +26,26 @@ sub history {
 	int(rand(4)) + 1;
 }
 
-my $lead_id = 19197335;
-foreach (1..100) { 
+my $lead_id = 9197341;
 #try {
 		my $order = $schema->resultset('Order')->create({
 			name => 'Иван',
 			surname => "Иванов",
-			patronymic => '',
-			birthdate => '13/32/1990',
+			patronymic => undef,
+			birthdate => '13/02/1990',
 			phone_mobile => 89219345678,
 			phone_home => 88123322322,
 			client_declared_credit_history => history(),
-			lead_id => $lead_id++,
+			lead_id => $lead_id,
 			user => 3064,
 		});
 		
+		#$order->list_init_args;
+		#print localtime, "\n";
+		#print "Sending Application\n";
 		#$order->uuid($order->send_order(1));
 		#$order->update;
 #	}
 #	catch {
 #		print $_, "\n";
 #	}
-	$lead_id++;
-	sleep 1;
-}
