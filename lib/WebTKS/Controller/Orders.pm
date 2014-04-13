@@ -1,4 +1,5 @@
-package WebTKS::Controller::Orders;
+﻿package WebTKS::Controller::Orders;
+use utf8;
 use Moose;
 use WebTKS::Form::Order;
 use namespace::autoclean;
@@ -48,6 +49,8 @@ sub error :Private {
 sub show : Chained('order_base') PathPart('') Args(1) {
 	my ( $self, $c, $order_id ) = @_;
 	
+	$c->load_status_msgs;
+	
 	$c->stash(
 		template => 'orders/show.tt',
 		order => $c->model('DB::TKS::Order')->find($order_id),
@@ -77,6 +80,13 @@ sub create : Chained('order_base') PathPart('create') Args(0) {
 	my $lead_id = $c->req->params->{lead_id};
 	my $user_id = $c->req->params->{user};
 	
+	
+	if (my $order = $c->model('DB::TKS::Order')->single({lead_id => $lead_id, seq => 1})) {
+		$c->redirect_and_detach( $c->uri_for($c->controller->action_for('show'),$order->id,
+		{mid => $c->set_error_msg("Для данного LEAD ID уже сформирована заявка")}));
+	}
+	
+	
 	my $lead = $c->model('DB::Vicidial::VicidialLead')->find($lead_id);
 	my $user = $c->model('DB::Vicidial::VicidialUser')->single({ user => $user_id });
 	
@@ -102,7 +112,7 @@ sub form {
 	);
 	
 	my $posted = $c->req->method eq 'POST';
-	my $result = $self->edit_form->run(
+	my $result = $self->{edit_form}->run(
 		posted => $posted,
 		update_field_list => form_hidden_fields($c->req->params),
 		item   => $c->stash->{order},
@@ -119,15 +129,16 @@ sub form {
 	# Form validated
 	my $order = $c->stash->{order};
 	# Send application form
-	my $result = $c->model('AppSender')->send($order->app_data);
+	my $res = $c->model('AppSender')->send($order->app_data);
 	# Update order and vicidial_list
-	$order->uuid($result->id);
+	$order->uuid($res->id);
 	$order->update;
 	my $lead = $c->stash->{lead};
-	$lead->comments($result->id);
+	$lead->comments($res->id);
 	$lead->update;
 	# Show order 
-	$c->res->redirect( $c->uri_for($c->controller->action_for('show'),$order->id) );
+	$c->res->redirect( $c->uri_for($c->controller->action_for('show'),$order->id,
+		{mid => $c->set_status_msg("Заявка успешно сохранена")}));
 }
 
 =encoding utf8

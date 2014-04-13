@@ -20,10 +20,15 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
-	   
-    UserAgent
 
     Unicode
+	
+	RedirectAndDetach
+	
+	Session
+    Session::Store::File
+    Session::State::Cookie
+	StatusMessage
 /;
 
 extends 'Catalyst';
