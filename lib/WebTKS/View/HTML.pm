@@ -1,4 +1,5 @@
-﻿package WebTKS::View::HTML;
+package WebTKS::View::HTML;
+use utf8;
 use Moose;
 use namespace::autoclean;
 

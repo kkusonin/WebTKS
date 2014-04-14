@@ -81,16 +81,14 @@ has_field 'phone_home' => (
 
 has_field 'client_declared_credit_history' => (
     type => 'Select',
-    default => 4,
     label => 'Кредитная история (со слов клиента)',
+	default => 4,
 );
 
 has_field submit => ( type => 'Submit', value => 'Отправить данные', element_class => ['btn'] );
 
 sub options_client_declared_credit_history {
-    my $self = shift;
-
-    return [ 
+	[ 
         1 => 'Хорошая',
         2 => 'Плохая',
         3 => 'Не брал кредитов',
@@ -107,18 +105,21 @@ sub options_client_declared_credit_history {
 #	$field->add_error('Несуществующий оператор');
 #}
 
-#sub validate_lead_id {
-#	my ($self, $field) = @_;
+sub validate_lead_id {
+	my ($self, $field) = @_;
 	
-#	$self->vicidial_schema
-#		 ->resultset('VicidialLead')
-#		 ->find($field->value) ||
-#	$field->add_error('Несуществующий LEAD ID');
-#}
+	$self->vicidial_schema
+		 ->resultset('VicidialLead')
+		 ->find($field->value) ||
+	$self->add_form_error('Несуществующий LEAD ID');
+	
+	
+}
 	
 	
   
 __PACKAGE__->meta->make_immutable;
 
 1;
+
 

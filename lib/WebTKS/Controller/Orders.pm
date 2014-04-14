@@ -1,4 +1,4 @@
-﻿package WebTKS::Controller::Orders;
+package WebTKS::Controller::Orders;
 use utf8;
 use Moose;
 use WebTKS::Form::Order;
@@ -7,12 +7,12 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 use WebTKS::Form::Order;
 
-has 'edit_form' => ( 
-	isa => 'WebTKS::Form::Order', 
-	is => 'rw',
-    lazy => 1, 
-	default => sub { WebTKS::Form::Order->new } 
-);
+#has 'edit_form' => ( 
+#	isa => 'WebTKS::Form::Order', 
+#	is => 'rw',
+#   lazy => 1, 
+#	default => sub { WebTKS::Form::Order->new } 
+#);
 =head1 NAME
 
 WebTKS::Controller::Orders - Catalyst Controller
@@ -43,6 +43,17 @@ sub error :Private {
 			error_message => $reason 
 		},
 		template	=> 'orders/error.tt',
+	);
+}
+
+sub index : Chained('order_base') PathPart('') Args(0) {
+	my ($self, $c) = @_;
+	
+	$c->load_status_msgs;
+	
+	$c->stash(
+		action   => $c->uri_for($c->controller->action_for('create')),
+		template => 'orders/index.tt',
 	);
 }
 
@@ -80,7 +91,6 @@ sub create : Chained('order_base') PathPart('create') Args(0) {
 	my $lead_id = $c->req->params->{lead_id};
 	my $user_id = $c->req->params->{user};
 	
-	
 	if (my $order = $c->model('DB::TKS::Order')->single({lead_id => $lead_id, seq => 1})) {
 		$c->redirect_and_detach( $c->uri_for($c->controller->action_for('show'),$order->id,
 		{mid => $c->set_error_msg("Для данного LEAD ID уже сформирована заявка")}));
@@ -89,6 +99,18 @@ sub create : Chained('order_base') PathPart('create') Args(0) {
 	
 	my $lead = $c->model('DB::Vicidial::VicidialLead')->find($lead_id);
 	my $user = $c->model('DB::Vicidial::VicidialUser')->single({ user => $user_id });
+	
+	my $error_msg = 
+		(! $lead_id) ? "Не указан LEAD ID"
+	  : (! $user_id) ? "Не указан идентификатор оператора"
+	  :	(! defined $lead)    ? "Несуществующий LEAD ID"
+	  : (! defined $user)    ? "Несуществующий идентификатор оператора"
+	  :                        undef;
+	  
+	if ($error_msg) {
+		$c->redirect_and_detach( $c->uri_for($c->controller->action_for('index'),
+		{mid => $c->set_error_msg($error_msg)}));
+	}
 	
 	# Create the empty order row for the form
     my $order = $c->model('DB::TKS::Order')->new_result({
@@ -107,12 +129,12 @@ sub create : Chained('order_base') PathPart('create') Args(0) {
 sub form {
 	my ($self, $c) = @_;
 	
-	$self->{edit_form} = WebTKS::Form::Order->new(
+	$c->stash->{edit_form} = WebTKS::Form::Order->new(
 		vicidial_schema => $c->model('DB::Vicidial')->schema,
 	);
 	
 	my $posted = $c->req->method eq 'POST';
-	my $result = $self->{edit_form}->run(
+	my $result = $c->stash->{edit_form}->run(
 		posted => $posted,
 		update_field_list => form_hidden_fields($c->req->params),
 		item   => $c->stash->{order},
@@ -157,3 +179,4 @@ it under the same terms as Perl itself.
 __PACKAGE__->meta->make_immutable;
 
 1;
+

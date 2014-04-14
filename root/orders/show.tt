@@ -25,3 +25,5 @@
 <h3>Мобильный телефон: [% order.phone_mobile %]</h3>
 <h3>Домашний телефон:  [% order.phone_home %]</h3>
 <h3>Идентификатор:     [% order.uuid %]</h3>
+<button type="button" class="btn"
+        onclick="window.open('', '_self', ''); window.close();">Закрыть</button>
