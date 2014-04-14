@@ -96,15 +96,6 @@ sub options_client_declared_credit_history {
     ];
 }
 
-#sub validate_user {
-#	my ($self, $field) = @_;
-#	
-#	$self->vicidial_schema
-#		 ->resultset('VicidialUser')
-#		 ->single({user => $field->value }) ||
-#	$field->add_error('Несуществующий оператор');
-#}
-
 sub validate_lead_id {
 	my ($self, $field) = @_;
 	

@@ -7,12 +7,6 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 use WebTKS::Form::Order;
 
-#has 'edit_form' => ( 
-#	isa => 'WebTKS::Form::Order', 
-#	is => 'rw',
-#   lazy => 1, 
-#	default => sub { WebTKS::Form::Order->new } 
-#);
 =head1 NAME
 
 WebTKS::Controller::Orders - Catalyst Controller
@@ -29,22 +23,6 @@ Catalyst Controller.
 =head2 index
 
 =cut
-
-# We use the error action to handle errors
-sub error :Private {
-  my ( $self, $c, $code, $reason ) = @_;
-	$reason	||= 'Unknown Error';
-	$code	||= 500;
- 
-	$c->res->status($code);
-	$c->stash(
-		data		=> { 
-			code		  => $code,
-			error_message => $reason 
-		},
-		template	=> 'orders/error.tt',
-	);
-}
 
 sub index : Chained('order_base') PathPart('') Args(0) {
 	my ($self, $c) = @_;
