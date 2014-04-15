@@ -89,10 +89,10 @@ has_field submit => ( type => 'Submit', value => 'Отправить данны�
 
 sub options_client_declared_credit_history {
 	[ 
+	    4 => 'Не знаю',
         1 => 'Хорошая',
         2 => 'Плохая',
         3 => 'Не брал кредитов',
-        4 => 'Не знаю',
     ];
 }
 
@@ -107,8 +107,6 @@ sub validate_lead_id {
 	
 }
 	
-	
-  
 __PACKAGE__->meta->make_immutable;
 
 1;
