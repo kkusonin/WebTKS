@@ -28,7 +28,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components(qw(FilterColumn));
+__PACKAGE__->load_components("FilterColumn");
 
 =head1 TABLE: C<orders>
 
@@ -125,6 +125,7 @@ __PACKAGE__->table("orders");
 =head2 client_declared_credit_history
 
   data_type: 'enum'
+  default_value: 'UNKNOWN'
   extra: {list => ["GOOD","BAD","NOT EXISTENT","UNKNOWN"]}
   is_nullable: 1
 
@@ -145,7 +146,7 @@ __PACKAGE__->table("orders");
 =head2 uuid
 
   data_type: 'char'
-  default_value: 0
+  default_value: (empty string)
   is_nullable: 0
   size: 32
 
@@ -169,6 +170,13 @@ __PACKAGE__->table("orders");
   default_value: 0
   extra: {unsigned => 1}
   is_nullable: 0
+
+=head2 status
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 8
 
 =cut
 
@@ -220,6 +228,7 @@ __PACKAGE__->add_columns(
   "client_declared_credit_history",
   {
     data_type => "enum",
+    default_value => "UNKNOWN",
     extra => { list => ["GOOD", "BAD", "NOT EXISTENT", "UNKNOWN"] },
     is_nullable => 1,
   },
@@ -233,7 +242,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "uuid",
-  { data_type => "char", default_value => 0, is_nullable => 0, size => 32 },
+  { data_type => "char", default_value => "", is_nullable => 0, size => 32 },
   "entry_time",
   {
     data_type => "timestamp",
@@ -255,6 +264,8 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 0,
   },
+  "status",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 8 },
 );
 
 =head1 PRIMARY KEY
@@ -286,8 +297,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("idx_lead_seq", ["lead_id", "seq"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-04-09 06:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GB6RkwYpDH5X6ZZgaewwAw
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-04-15 14:47:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iB5l1mXSFDA58AOt88buaA
 with 'TKS::Role::SendOrder';
 
 sub wm { $_[0]->user; }
@@ -322,4 +333,5 @@ __PACKAGE__->filter_column(
 );
 
 __PACKAGE__->meta->make_immutable;
+
 1;
