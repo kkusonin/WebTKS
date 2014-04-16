@@ -1,4 +1,5 @@
 package WebTKS::Controller::Report;
+use utf8;
 use Moose;
 use namespace::autoclean;
 use DateTime::Format::Strptime;
@@ -45,10 +46,11 @@ sub create : POST Chained('report_base') PathPart('') Args(0) {
 						  : map { order_to_report($_) } $c->model('DB::TKS::Order')->update_interval($start, $end);
 	$c->stash(
 		report_data => \@report_rows,
-		template => 'report.xml',
+		template => 'report.tt',
 	);
 	
-	$c->forward('View::Excel');
+	$c->res->header('Content-Disposition', qq[attachment; filename="report.xls"]);
+	$c->forward('WebTKS::View::Excel');
 }
 
 sub order_to_report {

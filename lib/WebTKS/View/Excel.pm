@@ -1,8 +1,7 @@
 package WebTKS::View::Excel;
-
 use strict;
 use warnings;
-
+use Catalyst::View::Excel::Template::Plus;
 use base qw/Catalyst::View::Excel::Template::Plus/;
 
 #__PACKAGE__->config(
