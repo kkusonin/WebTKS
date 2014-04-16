@@ -300,6 +300,7 @@ __PACKAGE__->add_unique_constraint("idx_lead_seq", ["lead_id", "seq"]);
 # Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-04-15 14:47:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iB5l1mXSFDA58AOt88buaA
 with 'TKS::Role::SendOrder';
+use DateTime::Format::MySQL;
 
 sub wm { $_[0]->user; }
 
@@ -316,8 +317,7 @@ around BUILDARGS => sub {
 };
 
 __PACKAGE__->filter_column(
-	'birthdate',
-	{
+	'birthdate' => {
 		filter_to_storage => sub {
 			if (ref $_[1]) {
 				return $_[1]->strftime('%Y-%m-%d');
@@ -329,7 +329,47 @@ __PACKAGE__->filter_column(
 		filter_from_storage => sub {
 			sprintf "%02d/%02d/%04d",reverse $_[1] =~ /(\d+)-(\d+)-(\d+)/;
 		},
-	}
+	},
+);
+__PACKAGE__->filter_column(
+	'entry_time' => {
+		filter_to_storage => sub {
+			if (ref $_[1]) {
+				$_[1]->strftime("%Y-%m-%d %H:%M:%S");
+			}
+			else {
+				$_[1];
+			}
+		},
+		filter_from_storage => sub {
+			if ( $_[1] ne '0000-00-00 00:00:00' ) {
+			    DateTime::Format::MySQL->parse_datetime($_[1]);
+			}
+			else {
+			    undef;
+			}
+		},
+	},
+);
+__PACKAGE__->filter_column(	
+	'update_time' => {
+		filter_to_storage => sub {
+			if (ref $_[1]) {
+				$_[1]->strftime("%Y-%m-%d %H:%M:%S");
+			}
+			else {
+				$_[1];
+			}
+		},
+		filter_from_storage => sub {
+			if ( $_[1] ne '0000-00-00 00:00:00' ) {
+			    DateTime::Format::MySQL->parse_datetime($_[1]);
+			}
+			else {
+			    undef;
+			}
+		},
+	},
 );
 
 __PACKAGE__->meta->make_immutable;

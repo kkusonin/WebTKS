@@ -49,6 +49,12 @@ __PACKAGE__->config(
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
+	'View::Excel::Template::Plus' => {
+        etp_config => {
+    	      INCLUDE_PATH =>  __PACKAGE__->path_to('root','reports'),
+    	  },
+    	  etp_engine => 'TT',
+    },
 );
 
 # Start the application
