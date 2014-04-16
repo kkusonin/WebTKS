@@ -19,12 +19,12 @@
 	<div class="control-group">
 		<label class="control-label" for="start">Начало периода* </label>
 		<div class="controls">
-		<input type="datetime" name="start" id="start" value="" /></div>
+		<input type="datetime" name="start" id="start" placeholder="ДД/ММ/ГГГГ ЧЧ:ММ" value="" /></div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="end">Конец периода* </label>
 		<div class="controls">
-		<input type="text" name="end" id="end" value="" /></div>
+		<input type="datetime" name="end" id="end" placeholder="ДД/ММ/ГГГГ ЧЧ:ММ" value="" /></div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="selection_type">Тип выборки</label>
