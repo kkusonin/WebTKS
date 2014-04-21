@@ -29,6 +29,35 @@ CREATE TABLE IF NOT EXISTS `orders` (
 	INDEX `idx_uuid_crc` (`uuid_crc`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `events` (
+  `id` int(9) unsigned NOT NULL auto_increment,
+  `uuid` char(32) NOT NULL,
+  `user` varchar(20) default '',
+  `status` char(3) NOT NULL default '',
+  `date` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `uuid_crc` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `idx_uuid_crc` (`uuid_crc`),
+  KEY `idx_timestamp` (`date`)
+) ENGINE=InnoDB;
+
+DELIMITER $$
+CREATE TRIGGER uuid_crc_ins 
+BEFORE INSERT ON events 
+FOR EACH ROW 
+BEGIN
+	SET NEW.uuid_crc = CRC32(NEW.uuid);
+END;
+$$
+CREATE TRIGGER uuid_crc_upd 
+BEFORE UPDATE ON events 
+FOR EACH ROW 
+BEGIN
+	SET NEW.uuid_crc = CRC32(NEW.uuid);
+END;
+$$
+DELIMITER ;
+
 CREATE USER 'tks'@'localhost' IDENTIFIED BY '12345';
 GRANT SELECT, INSERT, UPDATE, DELETE ON tks.* TO 'tks'@'localhost';
 	
